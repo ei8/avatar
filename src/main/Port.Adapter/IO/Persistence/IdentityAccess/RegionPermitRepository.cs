@@ -1,0 +1,37 @@
+﻿using org.neurul.Common.Domain.Model;
+using SQLite;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using works.ei8.Cortex.Sentry.Domain.Model;
+
+namespace works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess
+{
+    public class RegionPermitRepository : IRegionPermitRepository
+    {
+        private SQLiteAsyncConnection connection;
+
+        public async Task<IEnumerable<RegionPermit>> GetAllByUserNeuronId(Guid userNeuronId)
+        {
+            var results = this.connection.Table<RegionPermit>().Where(e => e.UserNeuronId == userNeuronId);
+            return (await results.ToArrayAsync());
+        }
+
+        public async Task Initialize(string storeId)
+        {
+            AssertionConcern.AssertArgumentNotNull(storeId, nameof(storeId));
+            AssertionConcern.AssertArgumentNotEmpty(storeId, $"'{nameof(storeId)}' cannot be empty.", nameof(storeId));
+
+            this.connection = await UserRepository.CreateConnection<RegionPermit>(storeId);
+
+            //sample data creator - call Initialize from CustomBootstrapper to invoke
+            //await this.connection.InsertAsync(new LayerPermit()
+            //{
+            //    UserNeuronId = Guid.NewGuid(),
+            //    LayerNeuronId = Guid.NewGuid(),
+            //    CanWrite = true,
+            //    CanRead = true
+            //});
+        }
+    }
+}
