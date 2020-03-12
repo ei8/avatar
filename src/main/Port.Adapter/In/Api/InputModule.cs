@@ -22,53 +22,65 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             if (bool.TryParse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.RequireAuthentication), out bool value) && value)
                 this.RequiresAuthentication();
 
+            // TODO: PATCH, DELETE
             this.Post("/{avatarId}/nuclei/d23/(.*)", async (parameters) =>
             {
-                var hc = new HttpClient()
+                var result = new Response();
+                HttpResponseMessage response = null;
+                var responseContent = string.Empty;
+                try
                 {
-                    BaseAddress = new Uri("http://192.168.8.135:60020")
-                };
+                    var hc = new HttpClient()
+                    {
+                        BaseAddress = new Uri("http://192.168.8.135:60020")
+                    };
 
-                string jsonString = RequestStream.FromStream(this.Request.Body).AsString();
-                string avatarId = parameters.avatarId;
-                var subjectId = GetUserSubjectId(this.Context);
-                // TODO: var author = await authorApplicationService.GetAuthorBySubjectId(avatarId, subjectId);
-                string authorId = "2cafd291-f025-40b4-80bb-325067786a32"; // author.User.NeuronId.ToString();
-                dynamic jsonObj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
-                
-                jsonObj.AuthorId = authorId;
-                jsonObj.RegionId = "2cafd291-f025-40b4-80bb-325067786a32";
-                var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    string jsonString = RequestStream.FromStream(this.Request.Body).AsString();
+                    string avatarId = parameters.avatarId;
+                    var subjectId = GetUserSubjectId(this.Context);
+                    var author = await authorApplicationService.GetAuthorBySubjectId(avatarId, subjectId);
+                    // DEL: string authorId = "2cafd291-f025-40b4-80bb-325067786a32"; // author.User.NeuronId.ToString();
+                    dynamic jsonObj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
-                var response = await hc.PostAsync(this.Context.Request.Path, content);
-                // var response = await hc.PostAsync($"/{parameters.avatarId}/eventsourcing/eventstore", content);
+                    jsonObj.AuthorId = author.User.NeuronId.ToString();
+                    // DEL: jsonObj.RegionId = "2cafd291-f025-40b4-80bb-325067786a32";
+                    var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var result = new Response { StatusCode = HttpStatusCode.OK };
-                if (!response.IsSuccessStatusCode)
-                    result = new TextResponse(HttpStatusCode.BadRequest, await response.Content.ReadAsStringAsync());
+                    response = await hc.PostAsync(this.Context.Request.Path, content);
+                    responseContent = await response.Content.ReadAsStringAsync();
+                    response.EnsureSuccessStatusCode();
+
+                    result = new TextResponse(HttpStatusCode.OK, responseContent);
+                }
+                catch (Exception ex)
+                {
+                    result = new TextResponse(HttpStatusCode.BadRequest, (response != null) ? responseContent : ex.ToString());
+                }
                 return result;
             }
             );
 
-            // DEL: this.Post("/{avatarId}/eventsourcing/eventstore", async (parameters) =>
-            //{
-            //    var hc = new HttpClient()
-            //    {
-            //        BaseAddress = new Uri("http://192.168.8.135:5000")
-            //    };
+            // TODO: Transfer to Port.Adapter.Out.OutputModule
+            this.Get("/{avatarId}/nuclei/d23/{any*}", async (parameters) =>
+            {
+                var hc = new HttpClient()
+                {
+                    BaseAddress = new Uri("http://192.168.8.135:60021")
+                };
 
-            //    var content = new StringContent(RequestStream.FromStream(this.Request.Body).AsString());
-            //    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await hc.GetAsync(this.Context.Request.Path);  
+                // DEL: $"/{parameters.avatarId}/nuclei/eventstore");
 
-            //    var response = await hc.PostAsync($"/{parameters.avatarId}/eventsourcing/eventstore", content);
-
-            //    var result = new Response { StatusCode = HttpStatusCode.OK };
-            //    if (!response.IsSuccessStatusCode)
-            //        result = new TextResponse(HttpStatusCode.BadRequest, await response.Content.ReadAsStringAsync());
-            //    return result;
-            //}
-            //);
+                return new TextResponse(
+                    response.IsSuccessStatusCode ? 
+                        HttpStatusCode.OK : 
+                        HttpStatusCode.BadRequest, 
+                    await response.Content.ReadAsStringAsync()
+                    );
+            }
+            );
         }
 
         // TODO: Get User Subject Id to specify subject id in call to AuthorApplicationService

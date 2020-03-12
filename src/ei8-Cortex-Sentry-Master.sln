@@ -35,6 +35,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "main\Port.Adapter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityAccess", "main\Port.Adapter\IO\Persistence\IdentityAccess\IdentityAccess.csproj", "{C916123F-C938-4AED-AE92-122AA7011343}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Process", "Process", "{8225332D-F622-44CE-83B1-42F6F0BEF040}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "main\Port.Adapter\IO\Process\Services\Services.csproj", "{D3820DF2-D95D-4646-9519-2EA60CE78D6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +89,10 @@ Global
 		{C916123F-C938-4AED-AE92-122AA7011343}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C916123F-C938-4AED-AE92-122AA7011343}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C916123F-C938-4AED-AE92-122AA7011343}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3820DF2-D95D-4646-9519-2EA60CE78D6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3820DF2-D95D-4646-9519-2EA60CE78D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3820DF2-D95D-4646-9519-2EA60CE78D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3820DF2-D95D-4646-9519-2EA60CE78D6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +108,8 @@ Global
 		{947B06FD-1ECB-43B0-9E00-D02843C0FFE4} = {A30F7F77-9251-456D-90EE-AFFEECB77852}
 		{07D5414D-1773-4E5D-B296-FE80772113B9} = {DBB322C0-BC6A-4962-98DC-8DBB176F9C0C}
 		{C916123F-C938-4AED-AE92-122AA7011343} = {01745522-9AA8-4F55-8D9B-B3301CA06AE0}
+		{8225332D-F622-44CE-83B1-42F6F0BEF040} = {4F77633D-80FC-4EA4-8DFB-128C1564996E}
+		{D3820DF2-D95D-4646-9519-2EA60CE78D6F} = {8225332D-F622-44CE-83B1-42F6F0BEF040}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52C9D9EC-9427-4D12-AC67-B848B8A8C45A}

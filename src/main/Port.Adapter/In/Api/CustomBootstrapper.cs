@@ -5,6 +5,7 @@ using works.ei8.Cortex.Graph.Client;
 using works.ei8.Cortex.Sentry.Application;
 using works.ei8.Cortex.Sentry.Domain.Model;
 using works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess;
+using works.ei8.Cortex.Sentry.Port.Adapter.IO.Process.Services;
 
 namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
 {
@@ -22,14 +23,8 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             container.Register<INeuronGraphQueryClient, HttpNeuronGraphQueryClient>();
             container.Register<IUserRepository, UserRepository>();
             container.Register<IRegionPermitRepository, RegionPermitRepository>();
-            // TODO: retrieve baseUrl from environmentvariables, ISettingsService similar to diary - nucleus and nucleus
-            container.Register<IAuthorApplicationService>((c, n) => new AuthorApplicationService(
-                string.Empty,
-                c.Resolve<INeuronGraphQueryClient>(),
-                c.Resolve<IUserRepository>(),
-                c.Resolve<IRegionPermitRepository>()
-                )
-            );
+            container.Register<ISettingsService, SettingsService>();
+            container.Register<IAuthorApplicationService, AuthorApplicationService>();
         }
     }
 }
