@@ -6,6 +6,7 @@ using works.ei8.Cortex.Sentry.Application;
 using works.ei8.Cortex.Sentry.Domain.Model;
 using works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess;
 using works.ei8.Cortex.Sentry.Port.Adapter.IO.Process.Services;
+using works.ei8.EventSourcing.Client.Out;
 
 namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
 {
@@ -24,6 +25,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             container.Register<IUserRepository, UserRepository>();
             container.Register<IRegionPermitRepository, RegionPermitRepository>();
             container.Register<ISettingsService, SettingsService>();
+            container.Register<INotificationClient, HttpNotificationClient>();
             container.Register<IAuthorApplicationService, AuthorApplicationService>();
         }
     }

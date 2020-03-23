@@ -64,21 +64,30 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             // TODO: Transfer to Port.Adapter.Out.OutputModule
             this.Get("/{avatarId}/nuclei/d23/{any*}", async (parameters) =>
             {
-                var hc = new HttpClient()
+                var result = new Response();
+                HttpResponseMessage response = null;
+                var responseContent = string.Empty;
+                try
                 {
-                    BaseAddress = new Uri("http://192.168.8.135:60021")
-                };
+                    var hc = new HttpClient()
+                    {
+                        BaseAddress = new Uri("http://192.168.8.135:60021")
+                    };
 
-                hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await hc.GetAsync(this.Context.Request.Path);  
-                // DEL: $"/{parameters.avatarId}/nuclei/eventstore");
+                    hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    response = await hc.GetAsync(
+                        this.Context.Request.Url.ToString().Substring(this.Context.Request.Url.ToString().IndexOf(this.Context.Request.Path))
+                        );
+                    responseContent = await response.Content.ReadAsStringAsync();
+                    response.EnsureSuccessStatusCode();
 
-                return new TextResponse(
-                    response.IsSuccessStatusCode ? 
-                        HttpStatusCode.OK : 
-                        HttpStatusCode.BadRequest, 
-                    await response.Content.ReadAsStringAsync()
-                    );
+                    return new TextResponse(HttpStatusCode.OK, responseContent);
+                }
+                catch (Exception ex)
+                {
+                    result = new TextResponse(HttpStatusCode.BadRequest, (response != null) ? responseContent : ex.ToString());
+                }
+                return result;
             }
             );
         }

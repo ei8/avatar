@@ -8,7 +8,7 @@ namespace works.ei8.Cortex.Sentry.Application
     {
         string CortexInBaseUrl { get; }
         string CortexOutBaseUrl { get; }
-
         string CortexGraphOutBaseUrl { get; }
+        string EventSourcingOutBaseUrl { get; } 
     }
 }

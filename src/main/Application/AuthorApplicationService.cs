@@ -1,10 +1,12 @@
-﻿using org.neurul.Common.Domain.Model;
+﻿using Flurl;
+using org.neurul.Common.Domain.Model;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using works.ei8.Cortex.Graph.Client;
 using works.ei8.Cortex.Sentry.Domain.Model;
+using works.ei8.EventSourcing.Client.Out;
 using static works.ei8.Cortex.Sentry.Application.Constants;
 
 namespace works.ei8.Cortex.Sentry.Application
@@ -12,13 +14,15 @@ namespace works.ei8.Cortex.Sentry.Application
     public class AuthorApplicationService : IAuthorApplicationService
     {
         private readonly ISettingsService settingsService;
+        private readonly INotificationClient notificationClient;
         private readonly INeuronGraphQueryClient neuronGraphQueryClient;
         private readonly IUserRepository userRepository;
         private readonly IRegionPermitRepository regionPermitRepository;
 
-        public AuthorApplicationService(ISettingsService settingsService, INeuronGraphQueryClient neuronGraphQueryClient, IUserRepository userRepository, IRegionPermitRepository regionPermitRepository)
+        public AuthorApplicationService(ISettingsService settingsService, INotificationClient notificationClient, INeuronGraphQueryClient neuronGraphQueryClient, IUserRepository userRepository, IRegionPermitRepository regionPermitRepository)
         {
             this.settingsService = settingsService;
+            this.notificationClient = notificationClient;
             this.neuronGraphQueryClient = neuronGraphQueryClient;
             this.userRepository = userRepository;
             this.regionPermitRepository = regionPermitRepository;
@@ -30,11 +34,12 @@ namespace works.ei8.Cortex.Sentry.Application
             AssertionConcern.AssertArgumentValid(g => g != Guid.Empty, neuronId, Constants.Messages.Exception.InvalidId, nameof(neuronId));
             AssertionConcern.AssertArgumentValid(g => g != Guid.Empty, subjectId, Constants.Messages.Exception.InvalidId, nameof(subjectId));
 
-            Uri.TryCreate(new Uri(this.settingsService.CortexGraphOutBaseUrl), avatarId, out Uri avatarUri);
+            var cortexGraphOutAvatarUrl = Url.Combine(this.settingsService.CortexGraphOutBaseUrl, avatarId) + "/";
+            var eventSourcingOutAvatarUrl = Url.Combine(this.settingsService.EventSourcingOutBaseUrl, avatarId) + "/";
             var author = await this.GetAuthorBySubjectId(avatarId, subjectId, token);
             
             // Ensure that Neuron Id is equal to AuthorId if first Neuron is being created
-            if ((await this.neuronGraphQueryClient.GetNeurons(avatarUri.ToString() + "/", limit: 1, token: token)).Count() == 0)
+            if ((await this.notificationClient.GetNotificationLog(eventSourcingOutAvatarUrl, string.Empty)).NotificationList.Count == 0)
                 AssertionConcern.AssertArgumentValid(m => m == author.User.NeuronId, neuronId, "Author Neuron is expected since Avatar is empty.", nameof(neuronId));
             // Ensure that Neuron Id is not equal to AuthorId if non-first Neuron is being created
             else
@@ -45,7 +50,7 @@ namespace works.ei8.Cortex.Sentry.Application
             {
                 // ensure that layer is a valid neuron
                 var region = await this.neuronGraphQueryClient.GetNeuronById(
-                    avatarUri.ToString() + "/",
+                    cortexGraphOutAvatarUrl,
                     regionId.ToString(),
                     token: token
                     );
@@ -54,7 +59,7 @@ namespace works.ei8.Cortex.Sentry.Application
 
             // get reference to neuron being modified
             var neuron = (await this.neuronGraphQueryClient.GetNeuronById(
-                avatarUri.ToString(),
+                cortexGraphOutAvatarUrl.ToString(),
                 neuronId.ToString(),
                 token: token
                 )).First();
