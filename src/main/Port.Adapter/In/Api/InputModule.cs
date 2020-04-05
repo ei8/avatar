@@ -22,7 +22,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             if (bool.TryParse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.RequireAuthentication), out bool value) && value)
                 this.RequiresAuthentication();
 
-            // TODO: PATCH, DELETE
+            // TODO: DELETE
             this.Post("/{avatarId}/nuclei/d23/(.*)", async (parameters) =>
             {
                 var result = new Response();
@@ -39,7 +39,6 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                     string avatarId = parameters.avatarId;
                     var subjectId = GetUserSubjectId(this.Context);
                     var author = await authorApplicationService.GetAuthorBySubjectId(avatarId, subjectId);
-                    // DEL: string authorId = "2cafd291-f025-40b4-80bb-325067786a32"; // author.User.NeuronId.ToString();
                     dynamic jsonObj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
                     jsonObj.AuthorId = author.User.NeuronId.ToString();
@@ -61,7 +60,50 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             }
             );
 
-            // TODO: Transfer to Port.Adapter.Out.OutputModule
+            this.Patch("/{avatarId}/nuclei/d23/{any*}", async (parameters) =>
+            {
+                var result = new Response();
+                HttpResponseMessage response = null;
+                var responseContent = string.Empty;
+                try
+                {
+                    var hc = new HttpClient()
+                    {
+                        BaseAddress = new Uri("http://192.168.8.135:60020")
+                    };
+
+                    string jsonString = RequestStream.FromStream(this.Request.Body).AsString();
+                    string avatarId = parameters.avatarId;
+                    var subjectId = GetUserSubjectId(this.Context);
+                    var author = await authorApplicationService.GetAuthorBySubjectId(avatarId, subjectId);
+                    dynamic jsonObj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
+
+                    jsonObj.AuthorId = author.User.NeuronId.ToString();
+                    var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    var message = new HttpRequestMessage(
+                            new HttpMethod("PATCH"),
+                            this.Context.Request.Path
+                        )
+                        { Content = content };
+                    foreach (var kvp in this.Context.Request.Headers.ToList())
+                        if (Array.IndexOf(new string[]{ "Content-Length","Content-Type" }, kvp.Key) < 0)
+                            message.Headers.Add(kvp.Key, string.Join(',', kvp.Value));
+                    response = await hc.SendAsync(message);
+                    responseContent = await response.Content.ReadAsStringAsync();
+                    response.EnsureSuccessStatusCode();
+
+                    result = new TextResponse(HttpStatusCode.OK, responseContent);
+                }
+                catch (Exception ex)
+                {
+                    result = new TextResponse(HttpStatusCode.BadRequest, (response != null) ? responseContent : ex.ToString());
+                }
+                return result;
+            }
+            );
+
             this.Get("/{avatarId}/nuclei/d23/{any*}", async (parameters) =>
             {
                 var result = new Response();
