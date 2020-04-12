@@ -70,14 +70,14 @@ namespace works.ei8.Cortex.Sentry.Application
             // does author user have a write permit
             AssertionConcern.AssertStateTrue(
                 permit != null,
-                string.Format(Messages.Exception.UnauthorizedLayerWriteTemplate, neuron.LayerTag)
+                string.Format(Messages.Exception.UnauthorizedLayerWriteTemplate, neuron.RegionTag)
                 );
 
             // TODO: test
             // does neuron already exist
             if (neuron != null)
             {                
-                AssertionConcern.AssertArgumentValid(r => r.ToString() == neuron.LayerId, regionId, "Specified RegionId does not match RegionId of specified Neuron.", nameof(regionId));
+                AssertionConcern.AssertArgumentValid(r => r.ToString() == neuron.RegionId, regionId, "Specified RegionId does not match RegionId of specified Neuron.", nameof(regionId));
 
                 // does author user have an admin write access, or author user is the author of this neuron
                 AssertionConcern.AssertStateTrue(
