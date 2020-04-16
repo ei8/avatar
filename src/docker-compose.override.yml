@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  in.api:
+  cortex-sentry.in.api:
     env_file:
       - ./var1.env
     environment:
@@ -10,7 +10,7 @@ services:
       - C:\db:C:\db
     ports:
       - "60030:80"
-  out.api:
+  cortex-sentry.out.api:
     env_file: 
       - ./var1.env
     environment:
