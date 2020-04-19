@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using works.ei8.Cortex.Sentry.Domain.Model;
+using works.ei8.Avatar.Domain.Model;
 
-namespace works.ei8.Cortex.Sentry.Application
+namespace works.ei8.Avatar.Application
 {
     public interface IAuthorApplicationService
     {

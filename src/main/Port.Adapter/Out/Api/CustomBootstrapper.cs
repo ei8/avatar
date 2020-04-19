@@ -5,7 +5,7 @@ using Nancy.TinyIoc;
 //using works.ei8.Cortex.Diary.Nucleus.Port.Adapter.IO.Persistence.Events.SQLite;
 //using dmIEventStore = works.ei8.Cortex.Diary.Nucleus.Domain.Model.IEventStore;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.Out.Api
+namespace works.ei8.Avatar.Port.Adapter.Out.Api
 {
     public class CustomBootstrapper : DefaultNancyBootstrapper
     {

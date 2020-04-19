@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>works.ei8.Cortex.Sentry.Port.Adapter.In.Api.Test</AssemblyName>
+    <AssemblyName>works.ei8.Avatar.Port.Adapter.In.Api.Test</AssemblyName>
 
-    <RootNamespace>works.ei8.Cortex.Sentry.Port.Adapter.In.Api.Test</RootNamespace>
+    <RootNamespace>works.ei8.Avatar.Port.Adapter.In.Api.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.Common
+namespace works.ei8.Avatar.Port.Adapter.Common
 {
     public struct EnvironmentVariableKeys
     {

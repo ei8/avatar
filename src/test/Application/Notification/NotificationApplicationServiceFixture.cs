@@ -10,7 +10,7 @@
 //using Xunit;
 //using CQRSlite.Events;
 
-//namespace works.ei8.Cortex.Sentry.Application.Test.Notification.NotificationApplicationServiceFixture.given
+//namespace works.ei8.Avatar.Application.Test.Notification.NotificationApplicationServiceFixture.given
 //{
 //    public abstract class Context : TestContext<NotificationApplicationService>
 //    {

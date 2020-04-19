@@ -5,11 +5,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using works.ei8.Cortex.Graph.Client;
-using works.ei8.Cortex.Sentry.Domain.Model;
+using works.ei8.Avatar.Domain.Model;
 using works.ei8.EventSourcing.Client.Out;
-using static works.ei8.Cortex.Sentry.Application.Constants;
+using static works.ei8.Avatar.Application.Constants;
 
-namespace works.ei8.Cortex.Sentry.Application
+namespace works.ei8.Avatar.Application
 {
     public class AuthorApplicationService : IAuthorApplicationService
     {

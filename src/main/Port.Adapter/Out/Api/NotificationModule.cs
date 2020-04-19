@@ -7,7 +7,7 @@ using org.neurul.Common;
 using System.Linq;
 using System.Text;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.Out.Api
+namespace works.ei8.Avatar.Port.Adapter.Out.Api
 {
     // TODO: public class NotificationModule : NancyModule
     //{

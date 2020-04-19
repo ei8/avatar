@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess</AssemblyName>
-    <RootNamespace>works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess</RootNamespace>
+    <AssemblyName>works.ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess</AssemblyName>
+    <RootNamespace>works.ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

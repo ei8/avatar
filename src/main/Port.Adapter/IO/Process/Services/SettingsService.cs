@@ -1,8 +1,8 @@
 ﻿using System;
-using works.ei8.Cortex.Sentry.Application;
-using works.ei8.Cortex.Sentry.Port.Adapter.Common;
+using works.ei8.Avatar.Application;
+using works.ei8.Avatar.Port.Adapter.Common;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.IO.Process.Services
+namespace works.ei8.Avatar.Port.Adapter.IO.Process.Services
 {
     public class SettingsService : ISettingsService
     {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.Out.Api
+namespace works.ei8.Avatar.Port.Adapter.Out.Api
 {
     // TODO: public class EventStoreModule : NancyModule
     //{

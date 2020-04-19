@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Nancy.Owin;
 using System;
-using works.ei8.Cortex.Sentry.Port.Adapter.Common;
+using works.ei8.Avatar.Port.Adapter.Common;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
+namespace works.ei8.Avatar.Port.Adapter.In.Api
 {
     public class Startup
     {
@@ -16,7 +16,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                     options.Authority = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.TokenIssuerAddress);
                     options.RequireHttpsMetadata = false;
                     options.ApiSecret = "secret";
-                    options.ApiName = "cortex-sentry";
+                    options.ApiName = "avatar";
                 });
         }
 

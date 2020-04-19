@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>works.ei8.Cortex.Sentry.Port.Adapter.In.Api</AssemblyName>
+    <AssemblyName>works.ei8.Avatar.Port.Adapter.In.Api</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>works.ei8.Cortex.Sentry.Port.Adapter.In.Api</PackageId>
-    <RootNamespace>works.ei8.Cortex.Sentry.Port.Adapter.In.Api</RootNamespace>
+    <PackageId>works.ei8.Avatar.Port.Adapter.In.Api</PackageId>
+    <RootNamespace>works.ei8.Avatar.Port.Adapter.In.Api</RootNamespace>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 

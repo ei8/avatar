@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>works.ei8.Cortex.Sentry.Application</AssemblyName>
-    <RootNamespace>works.ei8.Cortex.Sentry.Application</RootNamespace>
+    <AssemblyName>works.ei8.Avatar.Application</AssemblyName>
+    <RootNamespace>works.ei8.Avatar.Application</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>

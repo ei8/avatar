@@ -10,10 +10,10 @@ using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using works.ei8.Cortex.Sentry.Application;
-using works.ei8.Cortex.Sentry.Port.Adapter.Common;
+using works.ei8.Avatar.Application;
+using works.ei8.Avatar.Port.Adapter.Common;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
+namespace works.ei8.Avatar.Port.Adapter.In.Api
 {
     public class InputModule : NancyModule
     {

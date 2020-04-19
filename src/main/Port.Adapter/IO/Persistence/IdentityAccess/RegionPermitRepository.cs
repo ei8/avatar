@@ -3,9 +3,9 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using works.ei8.Cortex.Sentry.Domain.Model;
+using works.ei8.Avatar.Domain.Model;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess
+namespace works.ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
 {
     public class RegionPermitRepository : IRegionPermitRepository
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace works.ei8.Cortex.Sentry.Domain.Model
+namespace works.ei8.Avatar.Domain.Model
 {
     public interface IRegionPermitRepository
     {

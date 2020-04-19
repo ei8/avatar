@@ -12,7 +12,7 @@
 //using System.Threading.Tasks;
 //using Xunit;
 
-//namespace works.ei8.Cortex.Sentry.Port.Adapter.Out.Api.Test.NotificationModuleFixture.given
+//namespace works.ei8.Avatar.Port.Adapter.Out.Api.Test.NotificationModuleFixture.given
 //{
 //    public abstract class Context : TestContext<Browser>
 //    {

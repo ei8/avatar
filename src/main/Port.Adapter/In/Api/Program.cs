@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
+namespace works.ei8.Avatar.Port.Adapter.In.Api
 {
     public class Program
     {
