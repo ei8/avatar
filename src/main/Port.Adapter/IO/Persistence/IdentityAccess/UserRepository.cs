@@ -18,12 +18,9 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess
             return (await results.ToListAsync()).SingleOrDefault();
         }
 
-        public async Task Initialize(string storeId)
+        public async Task Initialize()
         {
-            AssertionConcern.AssertArgumentNotNull(storeId, nameof(storeId));
-            AssertionConcern.AssertArgumentNotEmpty(storeId, $"'{nameof(storeId)}' cannot be empty.", nameof(storeId));
-
-            this.connection = await UserRepository.CreateConnection<User>(storeId);
+            this.connection = await UserRepository.CreateConnection<User>();
 
             //sample data creator - call Initialize from CustomBootstrapper to invoke
             //await this.connection.InsertAsync(new User()
@@ -34,10 +31,10 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess
         }
 
         // TODO: Transfer to NeurUL.Common
-        internal static async Task<SQLiteAsyncConnection> CreateConnection<TTable>(string storeId) where TTable : new()
+        internal static async Task<SQLiteAsyncConnection> CreateConnection<TTable>() where TTable : new()
         {
             SQLiteAsyncConnection result = null;
-            string databasePath = string.Format(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.UserDatabasePath), storeId);
+            string databasePath = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.UserDatabasePath);
 
             if (!databasePath.Contains(":memory:"))
                 AssertionConcern.AssertPathValid(databasePath, nameof(databasePath));

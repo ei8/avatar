@@ -23,7 +23,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                 this.RequiresAuthentication();
 
             // TODO: DELETE
-            this.Post("/{avatarId}/nuclei/d23/(.*)", async (parameters) =>
+            this.Post("/nuclei/d23/(.*)", async (parameters) =>
             {
                 var result = new Response();
                 HttpResponseMessage response = null;
@@ -36,9 +36,8 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                     };
 
                     string jsonString = RequestStream.FromStream(this.Request.Body).AsString();
-                    string avatarId = parameters.avatarId;
                     var subjectId = GetUserSubjectId(this.Context);
-                    var author = await authorApplicationService.GetAuthorBySubjectId(avatarId, subjectId);
+                    var author = await authorApplicationService.GetAuthorBySubjectId(subjectId);
                     dynamic jsonObj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
                     jsonObj.AuthorId = author.User.NeuronId.ToString();
@@ -46,7 +45,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                     var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                    response = await hc.PostAsync(this.Context.Request.Path, content);
+                    response = await hc.PostAsync(InputModule.GetPath(this.Context.Request), content);
                     responseContent = await response.Content.ReadAsStringAsync();
                     response.EnsureSuccessStatusCode();
 
@@ -60,7 +59,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             }
             );
 
-            this.Patch("/{avatarId}/nuclei/d23/{any*}", async (parameters) =>
+            this.Patch("/nuclei/d23/{any*}", async (parameters) =>
             {
                 var result = new Response();
                 HttpResponseMessage response = null;
@@ -73,9 +72,8 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                     };
 
                     string jsonString = RequestStream.FromStream(this.Request.Body).AsString();
-                    string avatarId = parameters.avatarId;
                     var subjectId = GetUserSubjectId(this.Context);
-                    var author = await authorApplicationService.GetAuthorBySubjectId(avatarId, subjectId);
+                    var author = await authorApplicationService.GetAuthorBySubjectId(subjectId);
                     dynamic jsonObj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
                     jsonObj.AuthorId = author.User.NeuronId.ToString();
@@ -84,7 +82,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
 
                     var message = new HttpRequestMessage(
                             new HttpMethod("PATCH"),
-                            this.Context.Request.Path
+                            InputModule.GetPath(this.Context.Request)
                         )
                         { Content = content };
                     foreach (var kvp in this.Context.Request.Headers.ToList())
@@ -104,7 +102,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
             }
             );
 
-            this.Get("/{avatarId}/nuclei/d23/{any*}", async (parameters) =>
+            this.Get("/nuclei/d23/{any*}", async (parameters) =>
             {
                 var result = new Response();
                 HttpResponseMessage response = null;
@@ -117,9 +115,7 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                     };
 
                     hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    response = await hc.GetAsync(
-                        this.Context.Request.Url.ToString().Substring(this.Context.Request.Url.ToString().IndexOf(this.Context.Request.Path))
-                        );
+                    response = await hc.GetAsync(InputModule.GetPath(this.Context.Request));
                     responseContent = await response.Content.ReadAsStringAsync();
                     response.EnsureSuccessStatusCode();
 
@@ -132,6 +128,11 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.In.Api
                 return result;
             }
             );
+        }
+
+        private static string GetPath(Request request)
+        {
+            return request.Url.ToString().Substring(request.Url.ToString().IndexOf(request.Path));
         }
 
         // TODO: Get User Subject Id to specify subject id in call to AuthorApplicationService

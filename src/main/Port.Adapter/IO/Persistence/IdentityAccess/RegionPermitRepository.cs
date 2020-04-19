@@ -17,12 +17,9 @@ namespace works.ei8.Cortex.Sentry.Port.Adapter.IO.Persistence.IdentityAccess
             return (await results.ToArrayAsync());
         }
 
-        public async Task Initialize(string storeId)
+        public async Task Initialize()
         {
-            AssertionConcern.AssertArgumentNotNull(storeId, nameof(storeId));
-            AssertionConcern.AssertArgumentNotEmpty(storeId, $"'{nameof(storeId)}' cannot be empty.", nameof(storeId));
-
-            this.connection = await UserRepository.CreateConnection<RegionPermit>(storeId);
+            this.connection = await UserRepository.CreateConnection<RegionPermit>();
 
             //sample data creator - call Initialize from CustomBootstrapper to invoke
             //await this.connection.InsertAsync(new LayerPermit()

@@ -28,29 +28,28 @@ namespace works.ei8.Cortex.Sentry.Application
             this.regionPermitRepository = regionPermitRepository;
         }
 
-        public async Task<ValidationResult> ValidateWrite(string avatarId, Guid neuronId, Guid regionId, Guid subjectId, CancellationToken token = default)
+        public async Task<ValidationResult> ValidateWrite(Guid neuronId, Guid regionId, Guid subjectId, CancellationToken token = default)
         {
-            AssertionConcern.AssertArgumentNotNull(avatarId, nameof(avatarId));
             AssertionConcern.AssertArgumentValid(g => g != Guid.Empty, neuronId, Constants.Messages.Exception.InvalidId, nameof(neuronId));
             AssertionConcern.AssertArgumentValid(g => g != Guid.Empty, subjectId, Constants.Messages.Exception.InvalidId, nameof(subjectId));
 
-            var cortexGraphOutAvatarUrl = Url.Combine(this.settingsService.CortexGraphOutBaseUrl, avatarId) + "/";
-            var eventSourcingOutAvatarUrl = Url.Combine(this.settingsService.EventSourcingOutBaseUrl, avatarId) + "/";
-            var author = await this.GetAuthorBySubjectId(avatarId, subjectId, token);
+            var cortexGraphOutUrl = this.settingsService.CortexGraphOutBaseUrl + "/";
+            var eventSourcingOutUrl = this.settingsService.EventSourcingOutBaseUrl + "/";
+            var author = await this.GetAuthorBySubjectId(subjectId, token);
             
             // Ensure that Neuron Id is equal to AuthorId if first Neuron is being created
-            if ((await this.notificationClient.GetNotificationLog(eventSourcingOutAvatarUrl, string.Empty)).NotificationList.Count == 0)
-                AssertionConcern.AssertArgumentValid(m => m == author.User.NeuronId, neuronId, "Author Neuron is expected since Avatar is empty.", nameof(neuronId));
+            if ((await this.notificationClient.GetNotificationLog(eventSourcingOutUrl, string.Empty)).NotificationList.Count == 0)
+                AssertionConcern.AssertArgumentValid(m => m == author.User.NeuronId, neuronId, "Author Neuron is expected.", nameof(neuronId));
             // Ensure that Neuron Id is not equal to AuthorId if non-first Neuron is being created
             else
-                AssertionConcern.AssertArgumentValid(m => m != author.User.NeuronId, neuronId, "Author Neuron was not expected since Avatar is not empty.", nameof(neuronId));
+                AssertionConcern.AssertArgumentValid(m => m != author.User.NeuronId, neuronId, "Author Neuron not expected .", nameof(neuronId));
 
             // if region was specified, check if it exists
             if (regionId != Guid.Empty)
             {
                 // ensure that layer is a valid neuron
                 var region = await this.neuronGraphQueryClient.GetNeuronById(
-                    cortexGraphOutAvatarUrl,
+                    cortexGraphOutUrl,
                     regionId.ToString(),
                     token: token
                     );
@@ -59,7 +58,7 @@ namespace works.ei8.Cortex.Sentry.Application
 
             // get reference to neuron being modified
             var neuron = (await this.neuronGraphQueryClient.GetNeuronById(
-                cortexGraphOutAvatarUrl.ToString(),
+                cortexGraphOutUrl.ToString(),
                 neuronId.ToString(),
                 token: token
                 )).First();
@@ -89,26 +88,24 @@ namespace works.ei8.Cortex.Sentry.Application
             return new ValidationResult(new string[0], true);
         }
 
-        public async Task<Author> GetAuthorBySubjectId(string avatarId, Guid subjectId, CancellationToken token = default)
+        public async Task<Author> GetAuthorBySubjectId(Guid subjectId, CancellationToken token = default)
         {
-            AssertionConcern.AssertArgumentNotNull(avatarId, nameof(avatarId));
             AssertionConcern.AssertArgumentValid(g => g != Guid.Empty, subjectId, Constants.Messages.Exception.InvalidId, nameof(subjectId));
 
-            await this.userRepository.Initialize(avatarId);
+            await this.userRepository.Initialize();
             User user = await this.userRepository.GetBySubjectId(subjectId);
             
             AssertionConcern.AssertStateTrue(user != null, Constants.Messages.Exception.UnauthorizedUserAccess);
 
-            Uri.TryCreate(new Uri(this.settingsService.CortexGraphOutBaseUrl), avatarId, out Uri result);
             // TODO: check if null if neuron is inactive or deactivated, if so, should throw exception
             var userNeuron = (await this.neuronGraphQueryClient.GetNeuronById(
-                result.ToString() + "/",
+                this.settingsService.CortexGraphOutBaseUrl + "/",
                 user.NeuronId.ToString(),
                 token: token
                 )).First();
             AssertionConcern.AssertStateTrue(userNeuron != null, Constants.Messages.Exception.NeuronNotFound);
 
-            await this.regionPermitRepository.Initialize(avatarId);
+            await this.regionPermitRepository.Initialize();
             var permits = await this.regionPermitRepository.GetAllByUserNeuronId(user.NeuronId);
             var author = new Author(
                 user,

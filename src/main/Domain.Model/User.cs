@@ -11,7 +11,7 @@ namespace works.ei8.Cortex.Sentry.Domain.Model
     public class User
     {
         /// <summary>
-        /// NeuronId of User Neuron in Avatar.
+        /// NeuronId of User Neuron.
         /// </summary>
         [PrimaryKey]
         public Guid NeuronId { get; set; }

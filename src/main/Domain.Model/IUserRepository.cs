@@ -7,6 +7,6 @@ namespace works.ei8.Cortex.Sentry.Domain.Model
     {
         Task<User> GetBySubjectId(Guid subjectId);
 
-        Task Initialize(string storeId);
+        Task Initialize();
     }
 }
