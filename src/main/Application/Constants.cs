@@ -10,6 +10,7 @@ namespace works.ei8.Avatar.Application
         {
             public struct Exception
             {
+                public const string PathInvalid = "Specified Resource Path cannot be null or empty.";
                 public const string InvalidId = "Id must not be equal to '00000000-0000-0000-0000-000000000000'.";
                 public const string UnauthorizedUserAccess = "User access not authorized.";
                 public const string NeuronNotFound = "User Neuron not found.";

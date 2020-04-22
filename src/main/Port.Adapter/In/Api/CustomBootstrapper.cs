@@ -24,9 +24,11 @@ namespace works.ei8.Avatar.Port.Adapter.In.Api
             container.Register<INeuronGraphQueryClient, HttpNeuronGraphQueryClient>();
             container.Register<IUserRepository, UserRepository>();
             container.Register<IRegionPermitRepository, RegionPermitRepository>();
+            container.Register<IResourceRepository, ResourceRepository>();
             container.Register<ISettingsService, SettingsService>();
             container.Register<INotificationClient, HttpNotificationClient>();
             container.Register<IAuthorApplicationService, AuthorApplicationService>();
+            container.Register<IResourceApplicationService, ResourceApplicationService>();
         }
     }
 }

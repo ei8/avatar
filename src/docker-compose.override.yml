@@ -7,7 +7,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
-      - C:\db:C:\db
+      - C:\ei8\db:C:\db
     ports:
       - "60030:80"
   avatar.out.api:
@@ -16,7 +16,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
-      - C:\db:C:\db
+      - C:\ei8\db:C:\db
     ports:
       - "60031:80"
 networks:
