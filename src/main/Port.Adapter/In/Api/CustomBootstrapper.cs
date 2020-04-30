@@ -1,14 +1,14 @@
 ﻿using Nancy;
 using Nancy.TinyIoc;
-using org.neurul.Common.Http;
-using works.ei8.Cortex.Graph.Client;
-using works.ei8.Avatar.Application;
-using works.ei8.Avatar.Domain.Model;
-using works.ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess;
-using works.ei8.Avatar.Port.Adapter.IO.Process.Services;
-using works.ei8.EventSourcing.Client.Out;
+using neurUL.Common.Http;
+using ei8.Cortex.Graph.Client;
+using ei8.Avatar.Application;
+using ei8.Avatar.Domain.Model;
+using ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess;
+using ei8.Avatar.Port.Adapter.IO.Process.Services;
+using ei8.EventSourcing.Client.Out;
 
-namespace works.ei8.Avatar.Port.Adapter.In.Api
+namespace ei8.Avatar.Port.Adapter.In.Api
 {
     public class CustomBootstrapper : DefaultNancyBootstrapper
     {

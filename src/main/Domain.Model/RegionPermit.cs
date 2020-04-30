@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using System;
 
-namespace works.ei8.Avatar.Domain.Model
+namespace ei8.Avatar.Domain.Model
 {
     public class RegionPermit
     {

@@ -1,9 +1,9 @@
-﻿using org.neurul.Common.Domain.Model;
+﻿using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace works.ei8.Avatar.Domain.Model
+namespace ei8.Avatar.Domain.Model
 {
     public class Author
     {

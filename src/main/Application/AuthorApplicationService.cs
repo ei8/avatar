@@ -1,15 +1,15 @@
 ﻿using Flurl;
-using org.neurul.Common.Domain.Model;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using works.ei8.Cortex.Graph.Client;
-using works.ei8.Avatar.Domain.Model;
-using works.ei8.EventSourcing.Client.Out;
-using static works.ei8.Avatar.Application.Constants;
+using ei8.Cortex.Graph.Client;
+using ei8.Avatar.Domain.Model;
+using ei8.EventSourcing.Client.Out;
+using static ei8.Avatar.Application.Constants;
 
-namespace works.ei8.Avatar.Application
+namespace ei8.Avatar.Application
 {
     public class AuthorApplicationService : IAuthorApplicationService
     {

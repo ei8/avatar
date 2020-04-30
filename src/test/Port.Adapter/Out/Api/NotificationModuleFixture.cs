@@ -2,7 +2,7 @@
 //using Nancy;
 //using Nancy.Testing;
 //using Newtonsoft.Json;
-//using works.ei8.Cortex.Diary.Nucleus.Application.Notification;
+//using ei8.Cortex.Diary.Nucleus.Application.Notification;
 //using org.neurul.Common;
 //using org.neurul.Common.Events;
 //using org.neurul.Common.Test;
@@ -12,7 +12,7 @@
 //using System.Threading.Tasks;
 //using Xunit;
 
-//namespace works.ei8.Avatar.Port.Adapter.Out.Api.Test.NotificationModuleFixture.given
+//namespace ei8.Avatar.Port.Adapter.Out.Api.Test.NotificationModuleFixture.given
 //{
 //    public abstract class Context : TestContext<Browser>
 //    {

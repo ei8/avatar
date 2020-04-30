@@ -1,6 +1,6 @@
 ﻿// TODO: using Moq;
-//using works.ei8.Cortex.Diary.Nucleus.Application.Notifications;
-//using works.ei8.Cortex.Diary.Nucleus.Port.Adapter.IO.Persistence.Events;
+//using ei8.Cortex.Diary.Nucleus.Application.Notifications;
+//using ei8.Cortex.Diary.Nucleus.Port.Adapter.IO.Persistence.Events;
 //using org.neurul.Common.Events;
 //using org.neurul.Common.Test;
 //using System;
@@ -10,7 +10,7 @@
 //using Xunit;
 //using CQRSlite.Events;
 
-//namespace works.ei8.Avatar.Application.Test.Notification.NotificationApplicationServiceFixture.given
+//namespace ei8.Avatar.Application.Test.Notification.NotificationApplicationServiceFixture.given
 //{
 //    public abstract class Context : TestContext<NotificationApplicationService>
 //    {

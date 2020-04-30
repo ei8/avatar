@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace works.ei8.Avatar.Port.Adapter.Common
+namespace ei8.Avatar.Port.Adapter.Common
 {
     public struct EnvironmentVariableKeys
     {

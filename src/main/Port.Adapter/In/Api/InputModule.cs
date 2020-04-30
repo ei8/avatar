@@ -4,7 +4,7 @@ using Nancy.IO;
 using Nancy.Responses;
 using Nancy.Security;
 using Newtonsoft.Json;
-using org.neurul.Common.Domain.Model;
+using neurUL.Common.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -12,10 +12,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using works.ei8.Avatar.Application;
-using works.ei8.Avatar.Port.Adapter.Common;
+using ei8.Avatar.Application;
+using ei8.Avatar.Port.Adapter.Common;
 
-namespace works.ei8.Avatar.Port.Adapter.In.Api
+namespace ei8.Avatar.Port.Adapter.In.Api
 {
     public class InputModule : NancyModule
     {

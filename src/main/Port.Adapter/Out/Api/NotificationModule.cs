@@ -1,13 +1,13 @@
 ﻿using Nancy;
 using Nancy.Responses;
 using Newtonsoft.Json;
-using org.neurul.Common;
+using neurUL.Common;
 // using org.neurul.Common.Events;
-// TODO: using works.ei8.Cortex.Diary.Nucleus.Application.Notifications;
+// TODO: using ei8.Cortex.Diary.Nucleus.Application.Notifications;
 using System.Linq;
 using System.Text;
 
-namespace works.ei8.Avatar.Port.Adapter.Out.Api
+namespace ei8.Avatar.Port.Adapter.Out.Api
 {
     // TODO: public class NotificationModule : NancyModule
     //{

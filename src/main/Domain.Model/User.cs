@@ -3,7 +3,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 
-namespace works.ei8.Avatar.Domain.Model
+namespace ei8.Avatar.Domain.Model
 {
     /// <summary>
     /// Represents User Neurons. TODO: Should later be persisted as User Neurons, instead of as records in User databases.

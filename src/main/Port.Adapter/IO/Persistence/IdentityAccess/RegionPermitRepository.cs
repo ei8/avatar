@@ -1,11 +1,11 @@
-﻿using org.neurul.Common.Domain.Model;
+﻿using neurUL.Common.Domain.Model;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using works.ei8.Avatar.Domain.Model;
+using ei8.Avatar.Domain.Model;
 
-namespace works.ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
+namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
 {
     public class RegionPermitRepository : IRegionPermitRepository
     {

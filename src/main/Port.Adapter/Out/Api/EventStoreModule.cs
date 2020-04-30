@@ -1,13 +1,13 @@
 ﻿using Nancy;
 using Nancy.Responses;
 using Newtonsoft.Json;
-// TODO: using works.ei8.Cortex.Diary.Nucleus.Application.EventStores;
+// TODO: using ei8.Cortex.Diary.Nucleus.Application.EventStores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace works.ei8.Avatar.Port.Adapter.Out.Api
+namespace ei8.Avatar.Port.Adapter.Out.Api
 {
     // TODO: public class EventStoreModule : NancyModule
     //{

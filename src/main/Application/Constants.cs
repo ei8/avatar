@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace works.ei8.Avatar.Application
+namespace ei8.Avatar.Application
 {
     public struct Constants
     {

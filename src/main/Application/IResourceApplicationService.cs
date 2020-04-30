@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using works.ei8.Avatar.Domain.Model;
+using ei8.Avatar.Domain.Model;
 
-namespace works.ei8.Avatar.Application
+namespace ei8.Avatar.Application
 {
     public interface IResourceApplicationService
     {

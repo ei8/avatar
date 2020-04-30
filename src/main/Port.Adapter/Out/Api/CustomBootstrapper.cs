@@ -1,11 +1,11 @@
 ﻿using Nancy;
 using Nancy.TinyIoc;
-// TODO: using works.ei8.Cortex.Diary.Nucleus.Application.EventStores;
-//using works.ei8.Cortex.Diary.Nucleus.Application.Notifications;
-//using works.ei8.Cortex.Diary.Nucleus.Port.Adapter.IO.Persistence.Events.SQLite;
-//using dmIEventStore = works.ei8.Cortex.Diary.Nucleus.Domain.Model.IEventStore;
+// TODO: using ei8.Cortex.Diary.Nucleus.Application.EventStores;
+//using ei8.Cortex.Diary.Nucleus.Application.Notifications;
+//using ei8.Cortex.Diary.Nucleus.Port.Adapter.IO.Persistence.Events.SQLite;
+//using dmIEventStore = ei8.Cortex.Diary.Nucleus.Domain.Model.IEventStore;
 
-namespace works.ei8.Avatar.Port.Adapter.Out.Api
+namespace ei8.Avatar.Port.Adapter.Out.Api
 {
     public class CustomBootstrapper : DefaultNancyBootstrapper
     {

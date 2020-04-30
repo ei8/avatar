@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Nancy.Owin;
 using System;
-using works.ei8.Avatar.Port.Adapter.Common;
+using ei8.Avatar.Port.Adapter.Common;
 
-namespace works.ei8.Avatar.Port.Adapter.In.Api
+namespace ei8.Avatar.Port.Adapter.In.Api
 {
     public class Startup
     {
