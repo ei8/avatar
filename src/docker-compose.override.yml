@@ -10,15 +10,15 @@ services:
       - C:\ei8\db:C:\db
     ports:
       - "60030:80"
-  avatar.out.api:
-    env_file: 
-      - ./var1.env
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - C:\ei8\db:C:\db
-    ports:
-      - "60031:80"
+#  avatar.out.api:
+#    env_file: 
+#      - ./var1.env
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#    volumes:
+#      - C:\ei8\db:C:\db
+#    ports:
+#      - "60031:80"
 networks:
   default:
     external:

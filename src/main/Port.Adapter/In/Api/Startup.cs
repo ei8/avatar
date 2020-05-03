@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Nancy.Owin;
 using System;
 using ei8.Avatar.Port.Adapter.Common;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace ei8.Avatar.Port.Adapter.In.Api
 {
@@ -10,6 +11,11 @@ namespace ei8.Avatar.Port.Adapter.In.Api
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
