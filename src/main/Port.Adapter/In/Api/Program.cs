@@ -15,7 +15,9 @@ namespace ei8.Avatar.Port.Adapter.In.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .UseStartup<Startup>()
+                        .UseUrls("http://+:80");
                 });
     }
 }

@@ -56,9 +56,9 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 var responseContent = string.Empty;
                 try
                 {
-                    var resource = await resourceApplicationService.GetByPath(
-                        InputModule.GetCombinedPath(parameters)
-                        );
+                    var resourcePath = InputModule.GetCombinedPath(parameters);
+                    var resource = await resourceApplicationService.GetByPath(resourcePath);
+                    AssertionConcern.AssertStateTrue(resource != null, string.Format($"Resource '{resourcePath}' was not recognized."));
                     var hc = new HttpClient()
                     {
                         BaseAddress = new Uri(resource.OutUri)
@@ -89,9 +89,9 @@ namespace ei8.Avatar.Port.Adapter.In.Api
             var responseContent = string.Empty;
             try
             {
-                var resource = await resourceApplicationService.GetByPath(
-                    InputModule.GetCombinedPath(parameters)
-                    );
+                var resourcePath = InputModule.GetCombinedPath(parameters);
+                var resource = await resourceApplicationService.GetByPath(resourcePath);
+                AssertionConcern.AssertStateTrue(resource != null, string.Format($"Resource '{resourcePath}' was not recognized."));
                 var hc = new HttpClient()
                 {
                     BaseAddress = new Uri(resource.InUri)

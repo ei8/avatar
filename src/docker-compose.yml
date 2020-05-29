@@ -2,10 +2,10 @@ version: '3.4'
 
 services:
   avatar.in.api:
-    image: ei8works/avatar.in.api:0.1.3
+    image: ei8works/avatar.in.api:0.1.4
     build:
-      context: .
-      dockerfile: main\Port.Adapter\In\Api\Dockerfile
+      context: ./main/Port.Adapter/In/Api/
+      dockerfile: Dockerfile
 #  avatar.out.api:
 #    image: ei8works/avatar.out.api:0.1.0
 #    build:

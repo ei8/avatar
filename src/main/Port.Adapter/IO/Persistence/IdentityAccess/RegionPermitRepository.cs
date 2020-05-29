@@ -21,12 +21,12 @@ namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
         {
             this.connection = await UserRepository.CreateConnection<RegionPermit>();
 
-            //sample data creator - call Initialize from CustomBootstrapper to invoke
-            //await this.connection.InsertAsync(new LayerPermit()
+            // sample data creator - call Initialize from CustomBootstrapper to invoke
+            //await this.connection.InsertAsync(new RegionPermit()
             //{
             //    UserNeuronId = Guid.NewGuid(),
-            //    LayerNeuronId = Guid.NewGuid(),
-            //    CanWrite = true,
+            //    RegionNeuronId = Guid.NewGuid(), 
+            //    WriteLevel = 1,
             //    CanRead = true
             //});
         }

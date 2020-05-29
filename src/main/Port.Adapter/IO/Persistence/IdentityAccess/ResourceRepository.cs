@@ -23,11 +23,11 @@ namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
             this.connection = await UserRepository.CreateConnection<Resource>();
 
             //sample data creator - call Initialize from CustomBootstrapper to invoke
-            //await this.connection.InsertAsync(new Nucleus()
+            //await this.connection.InsertAsync(new Resource()
             //{
-            //    Path = "/nuclei/d23/",
-            //    InUri = "http://192.168.8.135:60020",
-            //    OutUri = "http://192.168.8.135:60021"
+            //    Path = "/nuclei/d23",
+            //    InUri = "http://192.168.8.131:60020",
+            //    OutUri = "http://192.168.8.131:60021"
             //});
         }
     }
