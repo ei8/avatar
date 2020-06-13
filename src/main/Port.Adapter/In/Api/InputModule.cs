@@ -79,7 +79,17 @@ namespace ei8.Avatar.Port.Adapter.In.Api
             }
             );
 
-            // TODO: DELETE
+            this.Delete("/{path1}/{path2}/{any*}", async (parameters) =>
+            {
+                return await InputModule.ProcessWriteMethod(
+                    this,
+                    HttpMethod.Delete,
+                    authorApplicationService,
+                    resourceApplicationService,
+                    parameters
+                    );
+            }
+            );
         }
 
         private static async Task<Response> ProcessWriteMethod(NancyModule module, HttpMethod method, IAuthorApplicationService authorApplicationService, IResourceApplicationService resourceApplicationService, dynamic parameters)
@@ -100,7 +110,9 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 string jsonString = RequestStream.FromStream(module.Request.Body).AsString();
                 var subjectId = GetUserSubjectId(module.Context);
                 var author = await authorApplicationService.GetAuthorBySubjectId(subjectId);
-                dynamic jsonObj = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
+                dynamic jsonObj = string.IsNullOrEmpty(jsonString) ? 
+                    new ExpandoObject() :
+                    JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
                 jsonObj.AuthorId = author.User.NeuronId.ToString();
                 var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
