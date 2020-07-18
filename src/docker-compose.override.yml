@@ -9,13 +9,8 @@ services:
     volumes:
       - /C/ei8/avatars/prod/sample:/C/db
     ports:
-      - 192.168.8.131:60013:80
-#  avatar.out.api:
-#    env_file: 
-#      - ./var1.env
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Development
-#    volumes:
-#      - C:\ei8\db:C:\db
-#    ports:
-#      - "60031:80"
+      - 0.0.0.0:60001:80
+networks:
+    default:
+        external:
+            name: sample_default

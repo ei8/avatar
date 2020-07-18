@@ -19,7 +19,7 @@ namespace ei8.Avatar.Port.Adapter.In.Api
 {
     public class InputModule : NancyModule
     {
-        public InputModule(IAuthorApplicationService authorApplicationService, IResourceApplicationService resourceApplicationService) : base(string.Empty)
+        public InputModule(IResourceApplicationService resourceApplicationService) : base(string.Empty)
         {
             if (bool.TryParse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.RequireAuthentication), out bool value) && value)
                 this.RequiresAuthentication();
@@ -30,7 +30,6 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 return await InputModule.ProcessWriteMethod(
                     this, 
                     HttpMethod.Post, 
-                    authorApplicationService, 
                     resourceApplicationService, 
                     parameters
                     );
@@ -42,7 +41,6 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 return await InputModule.ProcessWriteMethod(
                     this,
                     new HttpMethod("PATCH"),
-                    authorApplicationService,
                     resourceApplicationService,
                     parameters
                     );
@@ -84,7 +82,6 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 return await InputModule.ProcessWriteMethod(
                     this,
                     HttpMethod.Delete,
-                    authorApplicationService,
                     resourceApplicationService,
                     parameters
                     );
@@ -92,7 +89,8 @@ namespace ei8.Avatar.Port.Adapter.In.Api
             );
         }
 
-        private static async Task<Response> ProcessWriteMethod(NancyModule module, HttpMethod method, IAuthorApplicationService authorApplicationService, IResourceApplicationService resourceApplicationService, dynamic parameters)
+        // TODO: transfer to domain.model
+        private static async Task<Response> ProcessWriteMethod(NancyModule module, HttpMethod method, IResourceApplicationService resourceApplicationService, dynamic parameters)
         {
             var result = new Response();
             HttpResponseMessage response = null;
@@ -108,13 +106,11 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 };
 
                 string jsonString = RequestStream.FromStream(module.Request.Body).AsString();
-                var subjectId = GetUserSubjectId(module.Context);
-                var author = await authorApplicationService.GetAuthorBySubjectId(subjectId);
                 dynamic jsonObj = string.IsNullOrEmpty(jsonString) ? 
                     new ExpandoObject() :
                     JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
-                jsonObj.AuthorId = author.User.NeuronId.ToString();
+                jsonObj.SubjectId = InputModule.GetUserSubjectId(module.Context);
                 var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 
@@ -169,7 +165,7 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 result = Guid.Parse(context.CurrentUser.Claims.First(c => c.Type == "sub").Value);
             }
             else
-                result = Guid.Parse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.TestUserSubjectId));
+                result = Guid.Parse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ProxyUserSubjectId));
 
             return result;
         }

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ei8.Avatar.Domain.Model;
+using ei8.Avatar.Port.Adapter.Common;
+using neurUL.Common.Domain.Model;
 
 namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
 {
@@ -20,7 +22,7 @@ namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
 
         public async Task Initialize()
         {
-            this.connection = await UserRepository.CreateConnection<Resource>();
+            this.connection = await ResourceRepository.CreateConnection<Resource>();
 
             //sample data creator - call Initialize from CustomBootstrapper to invoke
             //await this.connection.InsertAsync(new Resource()
@@ -29,6 +31,19 @@ namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
             //    InUri = "http://192.168.8.131:60020",
             //    OutUri = "http://192.168.8.131:60021"
             //});
+        }
+
+        internal static async Task<SQLiteAsyncConnection> CreateConnection<TTable>() where TTable : new()
+        {
+            SQLiteAsyncConnection result = null;
+            string databasePath = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ResourceDatabasePath);
+
+            if (!databasePath.Contains(":memory:"))
+                AssertionConcern.AssertPathValid(databasePath, nameof(databasePath));
+
+            result = new SQLiteAsyncConnection(databasePath);
+            await result.CreateTableAsync<TTable>();
+            return result;
         }
     }
 }
