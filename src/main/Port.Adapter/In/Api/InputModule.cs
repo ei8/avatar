@@ -21,9 +21,6 @@ namespace ei8.Avatar.Port.Adapter.In.Api
     {
         public InputModule(IResourceApplicationService resourceApplicationService) : base(string.Empty)
         {
-            if (bool.TryParse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.RequireAuthentication), out bool value) && value)
-                this.RequiresAuthentication();
-
             // TODO: handle single path, 3 paths etc.
             this.Post("/{path1}/{path2}/{any*}", (Func<dynamic, Task<Response>>)(async (parameters) =>
             {
@@ -63,7 +60,13 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     };
 
                     hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    response = await hc.GetAsync(InputModule.GetPath(this.Context.Request));
+                    var initialPath = InputModule.GetPath(this.Context.Request);
+                    response = await hc.GetAsync(
+                        initialPath + 
+                        (initialPath.Contains('?') && initialPath.Contains('=') ? "&" : "?") +
+                        "subjectid=" +
+                        InputModule.GetUserSubjectId(this)
+                        );
                     responseContent = await response.Content.ReadAsStringAsync();
                     response.EnsureSuccessStatusCode();
 
@@ -110,7 +113,7 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     new ExpandoObject() :
                     JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
-                jsonObj.SubjectId = InputModule.GetUserSubjectId(module.Context);
+                jsonObj.SubjectId = InputModule.GetUserSubjectId(module);
                 var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 
@@ -154,18 +157,22 @@ namespace ei8.Avatar.Port.Adapter.In.Api
             return request.Url.ToString().Substring(request.Url.ToString().IndexOf(request.Path));
         }
 
-        // TODO: Get User Subject Id to specify subject id in call to AuthorApplicationService
-        internal static Guid GetUserSubjectId(NancyContext context)
+        internal static string GetUserSubjectId(NancyModule module)
         {
-            Guid result = Guid.Empty;
+            var result = string.Empty;
 
             if (bool.TryParse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.RequireAuthentication), out bool value) && value)
             {
-                AssertionConcern.AssertArgumentValid(c => c.CurrentUser != null, context, "Context User is null or not found.", nameof(context));
-                result = Guid.Parse(context.CurrentUser.Claims.First(c => c.Type == "sub").Value);
+                if (module.Context.CurrentUser == null)
+                    result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.AnonymousUserSubjectId);
+                else
+                {
+                    module.RequiresAuthentication();
+                    result = module.Context.CurrentUser.Claims.First(c => c.Type == "sub").Value;
+                }                   
             }
             else
-                result = Guid.Parse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ProxyUserSubjectId));
+                result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ProxyUserSubjectId);
 
             return result;
         }
