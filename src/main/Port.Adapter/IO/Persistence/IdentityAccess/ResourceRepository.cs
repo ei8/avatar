@@ -14,10 +14,10 @@ namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
     {
         private SQLiteAsyncConnection connection;
 
-        public async Task<Resource> GetByPath(string path)
+        public async Task<IEnumerable<Resource>> GetResources()
         {
-            var results = this.connection.Table<Resource>().Where(e => e.Path == path);
-            return (await results.ToListAsync()).SingleOrDefault();
+            var results = this.connection.Table<Resource>();
+            return await results.ToArrayAsync();
         }
 
         public async Task Initialize()

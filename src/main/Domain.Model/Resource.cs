@@ -8,10 +8,12 @@ namespace ei8.Avatar.Domain.Model
     public class Resource
     {
         [PrimaryKey]
-        public string Path { get; set; }
+        public string PathPattern { get; set; }
 
         public string InUri { get; set; }
 
         public string OutUri { get; set; }
+
+        public string Methods { get; set; }
     }
 }

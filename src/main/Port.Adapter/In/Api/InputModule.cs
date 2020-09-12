@@ -1,10 +1,13 @@
-﻿using Nancy;
+﻿using ei8.Avatar.Application;
+using ei8.Avatar.Domain.Model;
+using ei8.Avatar.Port.Adapter.Common;
+using Nancy;
 using Nancy.Extensions;
 using Nancy.IO;
 using Nancy.Responses;
 using Nancy.Security;
 using Newtonsoft.Json;
-using neurUL.Common.Domain.Model;
+using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -12,8 +15,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using ei8.Avatar.Application;
-using ei8.Avatar.Port.Adapter.Common;
 
 namespace ei8.Avatar.Port.Adapter.In.Api
 {
@@ -21,91 +22,69 @@ namespace ei8.Avatar.Port.Adapter.In.Api
     {
         public InputModule(IResourceApplicationService resourceApplicationService) : base(string.Empty)
         {
-            // TODO: handle single path, 3 paths etc.
-            this.Post("/{path1}/{path2}/{any*}", (Func<dynamic, Task<Response>>)(async (parameters) =>
-            {
-                return await InputModule.ProcessWriteMethod(
-                    this, 
-                    HttpMethod.Post, 
-                    resourceApplicationService, 
-                    parameters
+            AsyncContext.Run(() => resourceApplicationService.GetResources())
+                .ToList().ForEach(r =>
+                    r.Methods.Split(',').ToList().ForEach(m => 
+                        this.AddRoute(
+                            m, 
+                            r.PathPattern, 
+                            async (parameters, token) => 
+                                (
+                                    m == "GET" ? 
+                                        await InputModule.ProcessReadMethod(this, r.OutUri) : 
+                                        await InputModule.ProcessWriteMethod(this, new HttpMethod(m), r.InUri)
+                                ), 
+                            (nc) => true, 
+                            r.PathPattern
+                            )
+                        )                
                     );
-            })
-            );
-
-            this.Patch("/{path1}/{path2}/{any*}", async (parameters) =>
-            {
-                return await InputModule.ProcessWriteMethod(
-                    this,
-                    new HttpMethod("PATCH"),
-                    resourceApplicationService,
-                    parameters
-                    );
-            }
-            );
-
-            this.Get("/{path1}/{path2}/{any*}", async (parameters) =>
-            {
-                var result = new Response();
-                HttpResponseMessage response = null;
-                var responseContent = string.Empty;
-                try
-                {
-                    var resourcePath = InputModule.GetCombinedPath(parameters);
-                    var resource = await resourceApplicationService.GetByPath(resourcePath);
-                    AssertionConcern.AssertStateTrue(resource != null, string.Format($"Resource '{resourcePath}' was not recognized."));
-                    var hc = new HttpClient()
-                    {
-                        BaseAddress = new Uri(resource.OutUri)
-                    };
-
-                    hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var initialPath = InputModule.GetPath(this.Context.Request);
-                    response = await hc.GetAsync(
-                        initialPath + 
-                        (initialPath.Contains('?') && initialPath.Contains('=') ? "&" : "?") +
-                        "subjectid=" +
-                        InputModule.GetUserSubjectId(this)
-                        );
-                    responseContent = await response.Content.ReadAsStringAsync();
-                    response.EnsureSuccessStatusCode();
-
-                    return new TextResponse(HttpStatusCode.OK, responseContent);
-                }
-                catch (Exception ex)
-                {
-                    result = new TextResponse(HttpStatusCode.BadRequest, (response != null) ? responseContent : ex.ToString());
-                }
-                return result;
-            }
-            );
-
-            this.Delete("/{path1}/{path2}/{any*}", async (parameters) =>
-            {
-                return await InputModule.ProcessWriteMethod(
-                    this,
-                    HttpMethod.Delete,
-                    resourceApplicationService,
-                    parameters
-                    );
-            }
-            );
         }
 
-        // TODO: transfer to domain.model
-        private static async Task<Response> ProcessWriteMethod(NancyModule module, HttpMethod method, IResourceApplicationService resourceApplicationService, dynamic parameters)
+
+        #region TODO: transfer to domain.model
+        private static async Task<Response> ProcessReadMethod(NancyModule module, string outUri)
         {
             var result = new Response();
             HttpResponseMessage response = null;
             var responseContent = string.Empty;
             try
             {
-                var resourcePath = InputModule.GetCombinedPath(parameters);
-                var resource = await resourceApplicationService.GetByPath(resourcePath);
-                AssertionConcern.AssertStateTrue(resource != null, string.Format($"Resource '{resourcePath}' was not recognized."));
                 var hc = new HttpClient()
                 {
-                    BaseAddress = new Uri(resource.InUri)
+                    BaseAddress = new Uri(outUri)
+                };
+
+                hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var initialPath = InputModule.GetPath(module.Context.Request);
+                response = await hc.GetAsync(
+                    initialPath +
+                    (initialPath.Contains('?') && initialPath.Contains('=') ? "&" : "?") +
+                    "subjectid=" +
+                    InputModule.GetUserSubjectId(module)
+                    );
+                responseContent = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
+
+                return new TextResponse(HttpStatusCode.OK, responseContent);
+            }
+            catch (Exception ex)
+            {
+                result = new TextResponse(HttpStatusCode.BadRequest, (response != null) ? responseContent : ex.ToString());
+            }
+            return result;
+        }
+                
+        private static async Task<Response> ProcessWriteMethod(NancyModule module, HttpMethod method, string inUri)
+        {
+            var result = new Response();
+            HttpResponseMessage response = null;
+            var responseContent = string.Empty;
+            try
+            {
+                var hc = new HttpClient()
+                {
+                    BaseAddress = new Uri(inUri)
                 };
 
                 string jsonString = RequestStream.FromStream(module.Request.Body).AsString();
@@ -137,20 +116,7 @@ namespace ei8.Avatar.Port.Adapter.In.Api
             }
             return result;
         }
-
-        private static string GetCombinedPath(dynamic parameters)
-        {
-            var result = string.Empty;
-            var parametersDict = ((IDictionary<string, object>)parameters);
-            int i = 1;
-            while (parametersDict.ContainsKey("path" + i))
-            {
-                result += "/" + parametersDict["path" + i].ToString();
-                i++;
-            }
-
-            return result;
-        }
+        #endregion
 
         private static string GetPath(Request request)
         {
