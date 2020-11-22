@@ -7,7 +7,7 @@ namespace ei8.Avatar.Domain.Model
 {
     public interface IResourceRepository
     {
-        Task<Resource> GetByPath(string path);
+        Task<IEnumerable<Resource>> GetResources();
 
         Task Initialize();
     }

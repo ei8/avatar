@@ -16,6 +16,7 @@
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Serialization.JsonNet" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Neurul.Common.Http" Version="0.1.13" />
+    <PackageReference Include="Nito.AsyncEx.Context" Version="5.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.166-beta" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="3.0.3" />
   </ItemGroup>

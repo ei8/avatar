@@ -9,6 +9,6 @@ namespace ei8.Avatar.Application
 {
     public interface IResourceApplicationService
     {
-        Task<Resource> GetByPath(string path, CancellationToken token = default(CancellationToken));
+        Task<IEnumerable<Resource>> GetResources(CancellationToken token = default(CancellationToken));
     }
 }

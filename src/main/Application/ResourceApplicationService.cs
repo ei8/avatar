@@ -16,13 +16,10 @@ namespace ei8.Avatar.Application
             this.resourceRepository = resourceRepository;
         }
 
-        public async Task<Resource> GetByPath(string path, CancellationToken token = default)
+        public async Task<IEnumerable<Resource>> GetResources(CancellationToken token = default)
         {
-            AssertionConcern.AssertArgumentNotEmpty(path, Constants.Messages.Exception.PathInvalid, nameof(path));
-
             await this.resourceRepository.Initialize();
-
-            return await this.resourceRepository.GetByPath(path);
+            return await this.resourceRepository.GetResources();
         }
     }
 }
