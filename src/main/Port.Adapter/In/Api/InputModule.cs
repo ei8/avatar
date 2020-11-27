@@ -8,6 +8,7 @@ using Nancy.Responses;
 using Nancy.Security;
 using Newtonsoft.Json;
 using Nito.AsyncEx;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -20,6 +21,8 @@ namespace ei8.Avatar.Port.Adapter.In.Api
 {
     public class InputModule : NancyModule
     {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         public InputModule(IResourceApplicationService resourceApplicationService) : base(string.Empty)
         {
             AsyncContext.Run(() => resourceApplicationService.GetResources())
@@ -129,16 +132,24 @@ namespace ei8.Avatar.Port.Adapter.In.Api
 
             if (bool.TryParse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.RequireAuthentication), out bool value) && value)
             {
+                InputModule.logger.Info("Authentication required...");
                 if (module.Context.CurrentUser == null)
+                {
                     result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.AnonymousUserSubjectId);
+                    InputModule.logger.Info($"User is anonymous. Using subjectId - {{{LoggerProperties.SubjectId}}}", result);
+                }
                 else
                 {
                     module.RequiresAuthentication();
                     result = module.Context.CurrentUser.Claims.First(c => c.Type == "sub").Value;
-                }                   
+                    InputModule.logger.Info($"User has been authenticated. Using subjectId - {{{LoggerProperties.SubjectId}}}", result);
+                }
             }
             else
+            {
                 result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ProxyUserSubjectId);
+                InputModule.logger.Info($"Authentication not required. Using subjectId - {{{LoggerProperties.SubjectId}}}", result);
+            }
 
             return result;
         }

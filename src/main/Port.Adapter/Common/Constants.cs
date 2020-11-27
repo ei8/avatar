@@ -10,4 +10,9 @@ namespace ei8.Avatar.Port.Adapter.Common
         public const string RequireAuthentication = "REQUIRE_AUTHENTICATION";
         public const string TokenIssuerAddress = "TOKEN_ISSUER_ADDRESS";
     }
+
+    public struct LoggerProperties
+    {
+        public const string SubjectId = "SubjectId";
+    }
 }
