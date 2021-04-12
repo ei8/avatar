@@ -149,8 +149,8 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     {
                         // TODO: use SettingsService for the following values which are duplicated in ei8.Avatar.Port.Adapter.In.Api.Startup.ConfigureServices
                         Address = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.TokenIssuerAddress) + "/connect/introspect",
-                        ClientId = "avatar", 
-                        ClientSecret = "secret",
+                        ClientId = "avatarapi", 
+                        // TODO: ClientSecret = "secret",
                         Token = accessToken.Substring(accessToken.IndexOf(" ") + 1)
                     });
                     if (!introspectionResponse.IsActive)

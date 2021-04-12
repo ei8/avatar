@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using IdentityServer4.AccessTokenValidation;
 
 namespace ei8.Avatar.Port.Adapter.In.Api
 {
@@ -19,19 +20,28 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 options.AllowSynchronousIO = true;
             });
 
-            services.AddAuthentication("Bearer")
+            services.AddAuthentication(
+                IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.TokenIssuerAddress);
-                    options.RequireHttpsMetadata = false;
-                    options.ApiSecret = "secret";
-                    options.ApiName = "avatar";
+                    // TODO: necessary?
+                    //options.RequireHttpsMetadata = false;
+                    //options.ApiSecret = "secret";
+                    options.ApiName = "avatarapi";
                 });
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            // TODO: 
+            // app.UseHttpsRedirection();
+            // app.UseRouting();
+
             app.UseAuthentication();
+
+            // app.UseAuthorization();
+
             app.UseOwin(buildFunc => buildFunc.UseNancy());
             app.UseExceptionHandler(a => a.Run(async context =>
             {
