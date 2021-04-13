@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using IdentityServer4.AccessTokenValidation;
+using System.Net.Http;
+using Microsoft.IdentityModel.Logging;
 
 namespace ei8.Avatar.Port.Adapter.In.Api
 {
@@ -15,10 +17,14 @@ namespace ei8.Avatar.Port.Adapter.In.Api
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
             });
+
+            services.AddAuthorization();
 
             services.AddAuthentication(
                 IdentityServerAuthenticationDefaults.AuthenticationScheme)
@@ -29,6 +35,10 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     //options.RequireHttpsMetadata = false;
                     //options.ApiSecret = "secret";
                     options.ApiName = "avatarapi";
+                    // TODO: REMOVE ONCE CERTIFICATE SORTED
+                    HttpClientHandler handler = new HttpClientHandler();
+                    handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    options.JwtBackChannelHandler = handler;
                 });
         }
 
@@ -40,7 +50,7 @@ namespace ei8.Avatar.Port.Adapter.In.Api
 
             app.UseAuthentication();
 
-            // app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseOwin(buildFunc => buildFunc.UseNancy());
             app.UseExceptionHandler(a => a.Run(async context =>

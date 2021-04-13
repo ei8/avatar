@@ -16,7 +16,7 @@
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Serialization.JsonNet" Version="2.0.0-clinteastwood" />
-    <PackageReference Include="Neurul.Common.Http" Version="0.1.14" />
+    <PackageReference Include="Neurul.Common.Http" Version="0.1.15" />
     <PackageReference Include="Nito.AsyncEx.Context" Version="5.0.0" />
     <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.166-beta" />
