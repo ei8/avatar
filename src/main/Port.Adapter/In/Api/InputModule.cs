@@ -1,6 +1,7 @@
 ﻿using ei8.Avatar.Application;
 using ei8.Avatar.Domain.Model;
 using ei8.Avatar.Port.Adapter.Common;
+using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.Net.Http.Headers;
 using Nancy;
@@ -67,8 +68,8 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 response = await hc.GetAsync(
                     initialPath +
                     (initialPath.Contains('?') && initialPath.Contains('=') ? "&" : "?") +
-                    "subjectid=" +
-                    await InputModule.GetUserSubjectId(module, requestProvider)
+                    "userid=" +
+                    await InputModule.GetUserId(module, requestProvider)
                     );
                 responseContent = await response.Content.ReadAsStringAsync();
                 response.EnsureSuccessStatusCode();
@@ -99,7 +100,7 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     new ExpandoObject() :
                     JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
 
-                jsonObj.SubjectId = await InputModule.GetUserSubjectId(module, requestProvider);
+                jsonObj.UserId = await InputModule.GetUserId(module, requestProvider);
                 var content = new StringContent(JsonConvert.SerializeObject(jsonObj));
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 
@@ -130,7 +131,7 @@ namespace ei8.Avatar.Port.Adapter.In.Api
             return request.Url.ToString().Substring(request.Url.ToString().IndexOf(request.Path));
         }
 
-        internal static async Task<string> GetUserSubjectId(NancyModule module, IRequestProvider requestProvider)
+        internal static async Task<string> GetUserId(NancyModule module, IRequestProvider requestProvider)
         {
             var result = string.Empty;
 
@@ -140,8 +141,8 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                 var accessToken = module.Request.Headers[HeaderNames.Authorization].FirstOrDefault();
                 if (accessToken == null)
                 {
-                    result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.AnonymousUserSubjectId);
-                    InputModule.logger.Info($"User is anonymous. Using subjectId - {{{LoggerProperties.SubjectId}}}", result);
+                    result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.AnonymousUserId);
+                    InputModule.logger.Info($"User is anonymous. Using userId - {{{LoggerProperties.UserId}}}", result);
                 }
                 else
                 {
@@ -160,14 +161,14 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     }
 
                     module.RequiresAuthentication();
-                    result = module.Context.CurrentUser.Claims.First(c => c.Type == "sub").Value;
-                    InputModule.logger.Info($"User has been authenticated. Using subjectId - {{{LoggerProperties.SubjectId}}}", result);
+                    result = module.Context.CurrentUser.Claims.Single(c => c.Type == JwtClaimTypes.Email).Value;
+                    InputModule.logger.Info($"User has been authenticated. Using userId - {{{LoggerProperties.UserId}}}", result);
                 }
             }
             else
             {
-                result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ProxyUserSubjectId);
-                InputModule.logger.Info($"Authentication not required. Using subjectId - {{{LoggerProperties.SubjectId}}}", result);
+                result = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ProxyUserId);
+                InputModule.logger.Info($"Authentication not required. Using userId - {{{LoggerProperties.UserId}}}", result);
             }
 
             return result;
