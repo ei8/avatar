@@ -26,7 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Application\Application.csproj" />
     <ProjectReference Include="..\..\Common\Common.csproj" />
-    <ProjectReference Include="..\..\IO\Persistence\IdentityAccess\IdentityAccess.csproj" />
+    <ProjectReference Include="..\..\IO\Persistence\SQLite\SQLite.csproj" />
     <ProjectReference Include="..\..\IO\Process\Services\Services.csproj" />
   </ItemGroup>
 

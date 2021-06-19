@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess</AssemblyName>
-    <RootNamespace>ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess</RootNamespace>
+    <AssemblyName>ei8.Avatar.Port.Adapter.IO.Persistence.SQLite</AssemblyName>
+    <RootNamespace>ei8.Avatar.Port.Adapter.IO.Persistence.SQLite</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Out.Api", "main\Port.Adapte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "main\Port.Adapter\Common\Common.csproj", "{07D5414D-1773-4E5D-B296-FE80772113B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityAccess", "main\Port.Adapter\IO\Persistence\IdentityAccess\IdentityAccess.csproj", "{C916123F-C938-4AED-AE92-122AA7011343}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLite", "main\Port.Adapter\IO\Persistence\SQLite\SQLite.csproj", "{C916123F-C938-4AED-AE92-122AA7011343}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Process", "Process", "{8225332D-F622-44CE-83B1-42F6F0BEF040}"
 EndProject

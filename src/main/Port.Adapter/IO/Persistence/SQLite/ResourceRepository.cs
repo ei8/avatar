@@ -8,7 +8,7 @@ using ei8.Avatar.Domain.Model;
 using ei8.Avatar.Port.Adapter.Common;
 using neurUL.Common.Domain.Model;
 
-namespace ei8.Avatar.Port.Adapter.IO.Persistence.IdentityAccess
+namespace ei8.Avatar.Port.Adapter.IO.Persistence.SQLite
 {
     public class ResourceRepository : IResourceRepository
     {
