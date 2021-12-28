@@ -33,12 +33,15 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     options.Authority = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.TokenIssuerAddress);
                     // TODO: necessary?
                     //options.RequireHttpsMetadata = false;
-                    //options.ApiSecret = "secret";
-                    options.ApiName = "avatarapi";
-                    // TODO: REMOVE ONCE CERTIFICATE SORTED
-                    HttpClientHandler handler = new HttpClientHandler();
-                    handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    options.JwtBackChannelHandler = handler;
+                    options.ApiSecret = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ApiSecret);
+                    options.ApiName = Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ApiName);
+
+                    if (bool.TryParse(Environment.GetEnvironmentVariable(EnvironmentVariableKeys.ValidateServerCertificate), out bool vsc) && !vsc)
+                    {
+                        HttpClientHandler handler = new HttpClientHandler();
+                        handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                        options.JwtBackChannelHandler = handler;
+                    }
                 });
         }
 
