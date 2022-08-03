@@ -20,7 +20,7 @@
     <PackageReference Include="Nito.AsyncEx.Context" Version="5.0.0" />
     <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.166-beta" />
-    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="3.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="3.1.8" />
   </ItemGroup>
 
   <ItemGroup>
