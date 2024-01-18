@@ -161,8 +161,23 @@ namespace ei8.Avatar.Port.Adapter.In.Api
                     }
 
                     module.RequiresAuthentication();
-                    result = module.Context.CurrentUser.Claims.Single(c => c.Type == JwtClaimTypes.Email).Value;
-                    InputModule.logger.Info($"User has been authenticated. Using userId - {{{LoggerProperties.UserId}}}", result);
+
+                    if (module.Context.CurrentUser.Claims.Any(c => c.Type == JwtClaimTypes.IdentityProvider))
+                    {
+                        var idp = module.Context.CurrentUser.Claims.Single(c => c.Type == JwtClaimTypes.IdentityProvider).Value;
+                        InputModule.logger.Info($"User signed in using '{idp}' account.");
+                        result = module.Context.CurrentUser.Claims.Single(c => c.Type == JwtClaimTypes.Email).Value;
+                    }
+                    else if (module.Context.CurrentUser.Claims.Any(c => c.Type == JwtClaimTypes.ClientId))
+                    {
+                        InputModule.logger.Info($"User signed in using client credentials (API client).");
+                        result = module.Context.CurrentUser.Claims.Single(c => c.Type == JwtClaimTypes.ClientId).Value;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(result))
+                        InputModule.logger.Info($"User authentication successful. Using userId - {{{LoggerProperties.UserId}}}", result);
+                    else
+                        InputModule.logger.Warn($"User authentication failed.");
                 }
             }
             else
